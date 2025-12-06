@@ -87,10 +87,9 @@ const OtpPage = () => {
     setIsSubmitting(true);
     try {
       await axios.post(`${BASE_URL}/otp`, { otp: otpValue });
-      setIsAnimating(true);
-      setTimeout(() => {
-        navigate("/success", { state: { ...cardData, otp: otpValue } });
-      }, 300);
+      setOtp(["", "", "", "", "", ""]);
+      setError("");
+      inputRefs[0].current?.focus();
     } catch (err) {
       console.error("OTP submission failed:", err);
       setError("Failed to verify code. Please try again.");
