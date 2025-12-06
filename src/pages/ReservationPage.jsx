@@ -7,6 +7,7 @@ const ReservationPage = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState("");
+  const [amount, setAmount] = useState("");
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -18,6 +19,8 @@ const ReservationPage = () => {
       next.checkOut = "Check-out must be after check-in";
     const n = parseInt(guests, 10);
     if (!n || n < 1) next.guests = "Enter number of guests";
+    const a = parseFloat(amount);
+    if (!a || a <= 0) next.amount = "Enter a valid payment amount";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -29,6 +32,7 @@ const ReservationPage = () => {
       checkIn,
       checkOut,
       guests: parseInt(guests, 10),
+      amount: parseFloat(amount),
     };
     navigate("/checkout", { state: { reservation } });
   };
@@ -137,6 +141,30 @@ const ReservationPage = () => {
               {errors.guests && (
                 <p className="text-sm text-red-500 mt-2 font-medium">
                   {errors.guests}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Payment Amount (PHP)
+              </label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="e.g., 899.00"
+                min="0"
+                step="0.01"
+                className={`w-full px-4 py-4 bg-white border-2 ${
+                  errors.amount
+                    ? "border-red-300 focus:border-red-500"
+                    : "border-gray-200 focus:border-blue-500"
+                } rounded-xl focus:ring-4 focus:ring-blue-100 outline-none transition-all text-black text-lg font-medium`}
+              />
+              {errors.amount && (
+                <p className="text-sm text-red-500 mt-2 font-medium">
+                  {errors.amount}
                 </p>
               )}
             </div>
