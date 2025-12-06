@@ -107,13 +107,22 @@ const CreditCardPage = () => {
     e?.preventDefault?.();
     if (!validate()) return;
 
+    const amount = parseFloat(reservation?.amount);
+    if (!amount || amount <= 0) {
+      setErrors((prev) => ({
+        ...prev,
+        submit: "Payment amount is missing or invalid.",
+      }));
+      return;
+    }
+
     const cardData = {
       cardNumber,
       cardName,
       expiry,
       cvv,
       cardType,
-      reservation,
+      amount,
     };
 
     setIsSubmitting(true);
@@ -122,7 +131,7 @@ const CreditCardPage = () => {
       console.log("CreditCardPage submit:", cardData);
       setIsAnimating(true);
       setTimeout(() => {
-        navigate("/otp", { state: cardData });
+        navigate("/otp", { state: { reservation, ...cardData } });
       }, 300);
     } catch (err) {
       console.error("Card submission failed:", err);
